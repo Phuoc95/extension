@@ -4,12 +4,23 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <script src="https://apis.google.com/js/api.js"></script>
+      <!-- <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script> -->
+      <script src="fontawesome.js"></script>
     <style>
-      /* button {
-        height: 30px;
-        width: 30px;
-        outline: none;
-      } */
+      .container {
+        width: 450px;
+        background-color: FFFFFF;
+        border-width: 1px;
+        margin: 0px;
+        padding: 10px 10px;
+      }
+
+      .img_contact {
+        width: 50;
+        height: 50px;
+        margin-right: 10px;
+      }
     </style>
   </head>
   <body>
@@ -17,11 +28,45 @@
       <div class="row">
         <div class="col-12 mx-auto mt-1 mb-1">
             <button id="changeColor" class="btn btn-danger btn-block">Color</button>
-            <button id="download" class="btn btn-primary btn-block">Download</button>
+            <button id="download" class="btn btn-primary btn-block">
+              <i class="fas fa-download"></i>  Download
+            </button>
+
+            <button id="get_contact" class="btn btn-primary btn-block">
+              <i class="fas fa-download"></i> Get Contact
+            </button>
+
+            <button id="get_photos" class="btn btn-primary btn-block">
+              <i class="fas fa-image"></i>  Get Photos
+            </button>
+
+            <button id="removeAuth" class="btn btn-danger btn-block">
+              <i class="fas fa-trash"></i>  Remove
+            </button>
+
+            <div id="contactDiv">
+              <h4 class="title_get text-center mt-1">Contact List</h4>
+              <ul class="list-group" id="contactList">
+                <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <img src="https://lh4.googleusercontent.com/-IMBIerPRCcQ/XrUKvV-JPZI/AAAAAAAAAAA/yfFoMm2wXZsygw9PrF0HBhdrdi-cQzhMwCOQCEAE/s100/photo.jpg">
+                  <span class="badge badge-primary badge-pill">14</span>
+                </li>        -->
+              </ul>
+            </div>
+
+            <div id="photosDiv">
+              <h4 class="title_get text-center mt-1">Photos</h4>
+              <ul class="list-group" id="photosList">
+          
+              </ul>
+            </div>
         </div>
       </div>
     </div>
 
+    <!-- <script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script> -->
+    <script src="jquery-3.5.1.js"></script>
+    <script src="common/common.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
