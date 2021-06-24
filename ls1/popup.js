@@ -13,17 +13,19 @@
 
 let changeColor = document.getElementById("changeColor");
 chrome.storage.sync.get("color", function(data) {
-  changeColor.style.backgroundColor = data.color;
-  changeColor.setAttribute("value", data.color);
+    changeColor.style.backgroundColor = data.color;
+    changeColor.setAttribute("value", data.color);
 });
 
 changeColor.onclick = function(element) {
-  let color = element.target.value;
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    chrome.tabs.executeScript(tabs[0].id, {
-      code: 'document.body.style.backgroundColor = "' + color + '";'
+    let color = element.target.value;
+    let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.executeScript(tabs[0].id, {
+            code: 'document.body.style.backgroundColor = "#' + randomColor + '";'
+        });
     });
-  });
 };
 
 var API_KEY = "AIzaSyBr49EVsHjskoFCOX6pTXwM2JdmhzS3gR4";
@@ -35,133 +37,147 @@ var API_KEY = "AIzaSyBr49EVsHjskoFCOX6pTXwM2JdmhzS3gR4";
  */
 
 function authenticate() {
-  return gapi.auth2
-    .getAuthInstance()
-    .signIn({
-      scope:
-        "https://www.googleapis.com/auth/photoslibrary https://www.googleapis.com/auth/photoslibrary.readonly https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata"
-    })
-    .then(
-      function() {
-        console.log("Sign-in successful");
-      },
-      function(err) {
-        console.error("Error signing in", err);
-      }
-    );
+    return gapi.auth2
+        .getAuthInstance()
+        .signIn({
+            scope: "https://www.googleapis.com/auth/photoslibrary https://www.googleapis.com/auth/photoslibrary.readonly https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata"
+        })
+        .then(
+            function() {
+                console.log("Sign-in successful");
+            },
+            function(err) {
+                console.error("Error signing in", err);
+            }
+        );
 }
+
 function loadClient() {
-  gapi.client.setApiKey(API_KEY);
-  return gapi.client
-    .load(
-      "https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest"
-    )
-    .then(
-      function() {
-        debugger;
-        console.log("GAPI client loaded for API");
-      },
-      function(err) {
-        debugger;
-        console.error("Error loading GAPI client for API", err);
-      }
-    );
+    gapi.client.setApiKey(API_KEY);
+    return gapi.client
+        .load(
+            "https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest"
+        )
+        .then(
+            function() {
+                debugger;
+                console.log("GAPI client loaded for API");
+            },
+            function(err) {
+                debugger;
+                console.error("Error loading GAPI client for API", err);
+            }
+        );
 }
 // Make sure the client is loaded and sign-in is complete before calling this method.
 function execute() {
-  return gapi.client.photoslibrary.mediaItems.list({}).then(
-    function(response) {
-      // Handle the results here (response.result has the parsed body).
-      console.log("Response", response);
-    },
-    function(err) {
-      console.error("Execute error", err);
-    }
-  );
+    return gapi.client.photoslibrary.mediaItems.list({}).then(
+        function(response) {
+            // Handle the results here (response.result has the parsed body).
+            console.log("Response", response);
+        },
+        function(err) {
+            console.error("Execute error", err);
+        }
+    );
 }
 
 gapi.load("client:auth2", function() {
     debugger;
     gapi.auth2.init({
-      client_id:
-        "473591084217-si0uclvrr4itcba48cnrt6kg4dl0ginq.apps.googleusercontent.com"
+        client_id: "473591084217-si0uclvrr4itcba48cnrt6kg4dl0ginq.apps.googleusercontent.com"
     });
 });
 
 
+$(document).on("click", "#changeBackground", function(e) {
+    let arrImage = [
+        'https://i.imgur.com/RphICzc.jpg',
+        'https://i.imgur.com/DKV2UyM.jpg',
+        'https://i.imgur.com/PjWHeBa.jpg',
+        'https://i.imgur.com/pn8rzpb.jpg'
+    ]
+    let randImg = arrImage[Math.floor(Math.random() * arrImage.length)]
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.executeScript(tabs[0].id, {
+            code: `document.body.style.backgroundImage = 'url("${randImg}")'`
+        });
+    });
+});
+
 $(document).on("click", "#download", function(e) {
-  downloadFunc();
+    downloadFunc();
 });
 
 $(document).on("click", "#get_contact", function() {
-  // $("#photosDiv").hide();
-  // $("#contactList").empty();
-  chrome.identity.getAuthToken({ interactive: true }, function(token) {
-    debugger;
-    let init = {
-      method: "GET",
-      async: true,
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      },
-      contentType: "json"
-    };
-    fetch(
-      "https://people.googleapis.com/v1/contactGroups/all?maxMembers=20&key=" +
-        API_KEY,
-      init
-    )
-      .then(response => response.json())
-      .then(function(data) {
-        let returnedContacts = data.memberResourceNames;
-        // let photoDiv = document.querySelector('#contactDiv');
-
-        let html = "";
-        for (let i = 0; i < returnedContacts.length; i++) {
-          console.log(
-            `https://people.googleapis.com/v1/${returnedContacts[i]}?personFields=photos&key=API_KEY`
-          );
-          fetch(
-            "https://people.googleapis.com/v1/" +
-              returnedContacts[i] +
-              "?personFields=photos,names,emailAddresses&key=" +
-              API_KEY,
-            init
-          )
+    // $("#photosDiv").hide();
+    // $("#contactList").empty();
+    chrome.identity.getAuthToken({ interactive: true }, function(token) {
+        debugger;
+        let init = {
+            method: "GET",
+            async: true,
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            contentType: "json"
+        };
+        fetch(
+                "https://people.googleapis.com/v1/contactGroups/all?maxMembers=20&key=" +
+                API_KEY,
+                init
+            )
             .then(response => response.json())
             .then(function(data) {
-              console.log(data, 88);
-              let item_contact = `
+                let returnedContacts = data.memberResourceNames;
+                // let photoDiv = document.querySelector('#contactDiv');
+
+                let html = "";
+                for (let i = 0; i < returnedContacts.length; i++) {
+                    console.log(
+                        `https://people.googleapis.com/v1/${returnedContacts[i]}?personFields=photos&key=API_KEY`
+                    );
+                    fetch(
+                            "https://people.googleapis.com/v1/" +
+                            returnedContacts[i] +
+                            "?personFields=photos,names,emailAddresses&key=" +
+                            API_KEY,
+                            init
+                        )
+                        .then(response => response.json())
+                        .then(function(data) {
+                            console.log(data, 88);
+                            let item_contact = `
                                     <li class="list-group-item">
                                       <img src="${data.photos && data.photos[0].url}" class="img_contact">
                                       <span> ${data.names && data.names[0].displayName}</span> - <span> ${data.emailAddresses && data.emailAddresses[0].value}</span>
                                     </li>`;
 
-              $("#contactList").append(item_contact);
+                            $("#contactList").append(item_contact);
 
-              // let profileImg = document.createElement('img');
-              // profileImg.src = data.photos[0].url;
-              // photoDiv.appendChild(profileImg);
+                            // let profileImg = document.createElement('img');
+                            // profileImg.src = data.photos[0].url;
+                            // photoDiv.appendChild(profileImg);
+                        });
+                }
             });
-        }
-      });
-  });
+    });
 });
 
 $(document).on("click", "#get_photos", function() {
-  $("#photosDiv").hide();
-  $("#contactList").empty();
-  authenticate().then(loadClient);
+    $("#photosDiv").hide();
+    $("#contactList").empty();
+    authenticate().then(loadClient);
 });
 
 $(document).on("click", "#removeAuth", function() {
-  var token =
-    "ya29.a0Ae4lvC28lB6AkoMfEq3W_0RGoS5T3QU-cffFWaJPfD8-ErsEX2bgGefanEp_EnN9fBG6SaawVscTxm039P7eUZmqKceMX1kBs8BHPMs4BBGOGDjEjF787PJ4Lqd5pi-XdDNR8bFkARdJksy4Zm6zq0tU1UmEBwyCazo";
-  var url = "https://accounts.google.com/o/oauth2/revoke?token=" + token;
-  window.fetch(url);
+    var token =
+        "ya29.a0Ae4lvC28lB6AkoMfEq3W_0RGoS5T3QU-cffFWaJPfD8-ErsEX2bgGefanEp_EnN9fBG6SaawVscTxm039P7eUZmqKceMX1kBs8BHPMs4BBGOGDjEjF787PJ4Lqd5pi-XdDNR8bFkARdJksy4Zm6zq0tU1UmEBwyCazo";
+    var url = "https://accounts.google.com/o/oauth2/revoke?token=" + token;
+    window.fetch(url);
 
-  chrome.identity.removeCachedAuthToken({ token: token }, function() {
-    alert("removed");
-  });
+    chrome.identity.removeCachedAuthToken({ token: token }, function() {
+        alert("removed");
+    });
 });

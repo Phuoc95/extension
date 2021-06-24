@@ -1,41 +1,39 @@
 {
-  "name": "Getting Started 14",
-  "version": "1.0",
-  "description": "Build an Extension!",
-  "permissions": ["declarativeContent", "storage", "downloads", "tabs", "http://*/*", "*://*/*", "contextMenus", "identity"],
-  "background": {
-    "scripts": ["background.js", "common/common.js"],
-    "persistent": false
-  },
-  "content_scripts": [
-    {
-      "matches": ["*://*/*"],
-      "js": ["common/common.js"]
-    }
-  ],
-  "browser_action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "images/get_started16.png",
-      "32": "images/get_started32.png",
-      "48": "images/get_started48.png",
-      "128": "images/get_started128.png"
-    }
-  },
-  "icons": {
-    "16": "images/get_started16.png",
-    "32": "images/get_started32.png",
-    "48": "images/get_started48.png",
-    "128": "images/get_started128.png"
-  },
-  "options_page": "options.html",
-  "oauth2": {
-    "client_id": "473591084217-si0uclvrr4itcba48cnrt6kg4dl0ginq.apps.googleusercontent.com",
-    "scopes":[
-      "https://www.googleapis.com/auth/contacts.readonly",
-      "https://www.googleapis.com/auth/photoslibrary.sharing"
-    ]
-  },
-  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
-  "manifest_version": 2 
+    "name": "Getting Started 14",
+    "version": "1.0",
+    "description": "Build an Extension!",
+    "permissions": ["declarativeContent", "storage", "downloads", "tabs", "http://*/*", "*://*/*", "contextMenus", "identity"],
+    "background": {
+        "scripts": ["background.js", "common/common.js"],
+        "persistent": false
+    },
+    "content_scripts": [{
+        "matches": ["*://*/*"],
+        "js": ["common/common.js"]
+    }],
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "images/get_started16.png",
+            "32": "images/get_started32.png",
+            "48": "images/get_started48.png",
+            "128": "images/get_started128.png"
+        }
+    },
+    "icons": {
+        "16": "images/get_started16.png",
+        "32": "images/get_started32.png",
+        "48": "images/get_started48.png",
+        "128": "images/get_started128.png"
+    },
+    "options_page": "options.html",
+    "oauth2": {
+        "client_id": "473591084217-si0uclvrr4itcba48cnrt6kg4dl0ginq.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/contacts.readonly",
+            "https://www.googleapis.com/auth/photoslibrary.sharing"
+        ]
+    },
+    "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
+    "manifest_version": 2
 }
